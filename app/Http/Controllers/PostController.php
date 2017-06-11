@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Session;
 
 class PostController extends Controller
 {
@@ -35,7 +36,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // validaate the data
+        // validate the data
         // if error exists return to create() and display errors
         $this->validate($request, array(
                 'title' => 'required|max:255',
@@ -50,6 +51,11 @@ class PostController extends Controller
 
         $post->save(); // has new primary id
 
+        // Create session that exists for one request
+        // "Flash" exists for one page request
+        // "Put" exists until the session is removed
+        Session::flash('success', 'The blog post was successfully saved!');
+
         // redirect to another page
         return redirect()->route('posts.show', $post->id);
     }
@@ -62,7 +68,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('posts.show');
     }
 
     /**
